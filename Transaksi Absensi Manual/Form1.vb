@@ -8,7 +8,7 @@ Public Class Form1
     Dim datable As New DataTable
     Dim id_tran As String
 
-    'Load Id untuk combobox
+    'Load Id karyawan untuk combobox
     Sub LoadIdKaryawan()
         cmd = New OracleCommand("select ID_TRAN from T_ABSEN_MANUAL order by ID_TRAN", con)
         dr = cmd.ExecuteReader
@@ -17,7 +17,7 @@ Public Class Form1
         End While
     End Sub
 
-    'Load data ke dbgridview
+    'Load data absensi manual ke datagridview 
     Sub LoadDataKaryawan()
         id_tran = ComboBox1.SelectedItem.ToString
         da = New OracleDataAdapter(" select b.npk,c.nama,b.kerja_1 as jam_masuk, b.kerja_2 as jam_pulang, b.lembur_1 as lembur_mulai," &
@@ -61,7 +61,7 @@ Public Class Form1
         datable.Clear()
     End Sub
 
-    'Cetak semua laporan
+    'Cetak semua laporan transaksi manual
     Sub CetakDataAbsenAll()
         id_tran = ComboBox1.SelectedItem.ToString
         da = New OracleDataAdapter("select a.id_tran,a.status,to_char(a.dt_tran, 'fmdd MON yyyy')as tanggal,b.npk,c.nama,b.kerja_1 as jam_masuk, b.kerja_2 as jam_pulang, b.lembur_1 as lembur_mulai, b.lembur_2 as lembur_pulang, b.ijin_1 as ijin_keluar, b.ijin_2 as ijin_kembali, d.n_jabatan as jabatan, e.nama_departemen as departemen, a.ket as keterangan, b.terlambat, b.pul_awal as pulang_awal ,b.jum_jamker as jam_kerja,f.nama as pembuat, j.n_jabatan as jab_buat, g.nama as pemeriksa, k.n_jabatan as jab_periksa,h.nama as menyetujui, l.n_jabatan as jab_setuju,i.nama as mengetahui, m.n_jabatan as jab_mengetahui from t_absen_manual a left join t_absen_manual_detil b on a.id_tran=b.id_tran left join karyawan c on b.npk=c.npk left join jab d on c.jab=d.id_jabatan left join dept e on c.dept=e.id_departemen left join karyawan f on f.npk=a.lev_1 left join karyawan g on g.npk=a.lev_2 left join karyawan h on h.npk=a.lev_3 left join karyawan i on i.npk=a.lev_4 left join jab j on j.id_jabatan=f.jab left join jab k on k.id_jabatan=g.jab left join jab l on l.id_jabatan=h.jab left join jab m on m.id_jabatan=i.jab", con)
